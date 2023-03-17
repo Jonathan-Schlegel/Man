@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>BASH - Mémo pour scripterWiki</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="BASH_fichiers/print.css" type="text/css" media="screen">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<h1>BASH - Mémo pour scripter</h1>
+		<div><h2 class="formatter-title wiki-paragraph-2" id="paragraph-introduction">Introduction</h2><br>
+
+<br>
+Je script, je script, mais parfois, j'ai un sacré trou de mémoire ... et je galère à trouver ce que je cherche sur Internet.<br>
+Comment on incrémente une variable ? Comment on fait un SI, un POUR ?<br>
+Et bien la réponse se trouve ci-dessous !<br>
+<br>
+<h2 class="formatter-title wiki-paragraph-2" id="paragraph-les-variables">Les variables</h2><br>
+
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-affectation-de-variable">Affectation de variable</h3><br>
+
+<br>
+Pour mettre dans la variable <strong>a</strong> la valeur <span style="text-decoration: underline;">chaîne</span> <strong>toto</strong> :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #007800;">a</span>=<span style="color: #ff0000;">"abcdefghijklmnopqrstuvwxyz"</span></pre></pre></div></div><br>
+<br>
+De la même façon, on peut mettre dans des variables des nombres :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #007800;">b</span>=<span style="color: #000000;">2</span></pre></pre></div></div><br>
+<br>
+On peut mettre dans une variable le résultat d'une <span style="text-decoration: underline;">commande shell </span>en encadrant la commande dans <strong>$()</strong> :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #007800;">nb</span>=$<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #c20cb9; font-weight: bold;">ls</span> <span style="color: #660033;">-l</span> <span style="color: #000000; font-weight: bold;">/</span>etc <span style="color: #000000; font-weight: bold;">|</span> <span style="color: #c20cb9; font-weight: bold;">wc</span> -l<span style="color: #7a0874; font-weight: bold;">)</span></pre></pre></div></div><br>
+<br>
+On pourra veiller à déclarer correctement les variables avec la commande <strong>declare</strong> pour forcer le type :<br>
+<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">declare</span> <span style="color: #660033;">-r</span> variableEnLectureSeule
+<span style="color: #7a0874; font-weight: bold;">declare</span> <span style="color: #660033;">-i</span> entier
+<span style="color: #7a0874; font-weight: bold;">declare</span> <span style="color: #660033;">-a</span> tableau</pre></pre></div></div><br>
+<br>
+On peut faire du 2 en 1 évidemment : déclarer et affecter<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">declare</span> <span style="color: #660033;">-i</span> <span style="color: #007800;">nb</span>=<span style="color: #000000;">42</span></pre></pre></div></div><br>
+<br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-utiliser-les-variables">Utiliser les variables</h3><br>
+
+<br>
+Pour utiliser ces variables, ajouter un <strong>$</strong> devant. Exemple pour afficher la variable a :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #007800;">$a</span></pre></pre></div></div><br>
+<br>
+On peut l'appeler en l'encadrant avec ${} :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${a}</span></pre></pre></div></div><br>
+<br>
+On peut aussi afficher la longueur de cette variable avec ${#var} :<br>
+<div class="formatter-container formatter-code code-TEXT"><span class="formatter-title">Code TEXT :</span><div class="formatter-content"><pre style="display:inline;"><pre class="text" style="font-family:monospace;">echo ${#a}</pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-utilisation-avancee">Utilisation avancée</h3><br>
+
+<br>
+On peut aussi extraire une sous-chaine à la volée<br>
+<br>
+Depuis une position (première position à 0) jusqu'à la fin  :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${VAR:position}</span></pre></pre></div></div><br>
+<br>
+Depuis une position avec une longueur :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${VAR:position:longueur}</span></pre></pre></div></div><br>
+<br>
+Exemple pour afficher 6 caractères de la variable a en commençant au caractère 0 (début) :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${a:0:6}</span></pre></pre></div></div><br>
+<br>
+Exemple pour afficher à partir du caractère 0 mais en retirant les 4 derniers caractères :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${a:0:-4}</span></pre></pre></div></div><br>
+<br>
+<br>
+On peut aussi faire de la substitution directement dans la variable (sans passer par sed par exemple) :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${VAR/cherche/remplace}</span></pre></pre></div></div><br>
+<br>
+Exemple, remplacer le "e" par "E" :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${VAR/e/E}</span></pre></pre></div></div><br>
+<br>
+Si on veut que cela se fasse de manière globale (comme le /g de sed), on écrira 2 barres obliques :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${VAR//cherche/remplace}</span></pre></pre></div></div><br>
+<br>
+<br>
+On pourra aussi modifier la casse.<br>
+<br>
+Forcer en MAJUSCULES :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${VAR^^}</span></pre></pre></div></div><br>
+<br>
+Forcer en minuscules :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${VAR,,}</span></pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-variables-speciales">Variables spéciales</h3><br>
+
+<br>
+Il existe quelques variables spéciales :<br>
+<br>
+<strong>$$</strong> : PID du shell courant<br>
+<strong>$!</strong>  : PID du dernier travail lancé en arrière plan<br>
+<strong>$?</strong>  : code retour de la dernière commande<br>
+<br>
+Et d'autres variables prédéfinies, dites variables d'environnement :<br>
+<br>
+<strong>$HOME</strong>   chemin du répertoire personnel de l'utilisateur<br>
+<strong>$OLDPWD</strong>   chemin du répertoire précédent<br>
+<strong>$PATH</strong>   liste des chemins de recherche des commandes exécutables<br>
+<strong>$PPID</strong>   PID du processus père du shell<br>
+<strong>$PS1</strong>   invite principale du shell<br>
+<strong>$PWD</strong>   chemin du répertoire courant<br>
+<strong>$RANDOM</strong>  nombre entier aléatoire compris entre 0 et 32767<br>
+<strong>$REPLY</strong>   variable par défaut de la commande "read" et de la structure shell "select"<br>
+<strong>$SECONDS</strong>   nombre de secondes écoulées depuis le lancement du shell<br>
+<br>
+<h2 class="formatter-title wiki-paragraph-2" id="paragraph-calculs">Calculs</h2><br>
+
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-calculs-simples">Calculs simples</h3><br>
+
+<br>
+Grosso-modo, pour faire des calculs simples, on utilise la syntaxe suivante :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #666666;">$</span><span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #7a0874; font-weight: bold;">(</span>calcul<span style="color: #7a0874; font-weight: bold;">)</span><span style="color: #7a0874; font-weight: bold;">)</span></pre></pre></div></div><br>
+<br>
+On peut affecter ce calcul à une variable :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #007800;">a</span>=$<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #7a0874; font-weight: bold;">(</span>calcul<span style="color: #7a0874; font-weight: bold;">)</span><span style="color: #7a0874; font-weight: bold;">)</span></pre></pre></div></div><br>
+<br>
+Ou bien l'afficher :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> $<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #7a0874; font-weight: bold;">(</span>calcul<span style="color: #7a0874; font-weight: bold;">)</span><span style="color: #7a0874; font-weight: bold;">)</span></pre></pre></div></div><br>
+<br>
+Si on veut faire une addition :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> $<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #000000;">21</span>+<span style="color: #000000;">21</span><span style="color: #7a0874; font-weight: bold;">)</span><span style="color: #7a0874; font-weight: bold;">)</span>
+<span style="color: #000000;">42</span></pre></pre></div></div><br>
+<br>
+Si on veut faire une soustraction :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> $<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #000000;">63</span>-<span style="color: #000000;">21</span><span style="color: #7a0874; font-weight: bold;">)</span><span style="color: #7a0874; font-weight: bold;">)</span>
+<span style="color: #000000;">42</span></pre></pre></div></div><br>
+<br>
+Si on veut faire une multiplication :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> $<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #000000;">2</span><span style="color: #000000; font-weight: bold;">*</span><span style="color: #000000;">21</span><span style="color: #7a0874; font-weight: bold;">)</span><span style="color: #7a0874; font-weight: bold;">)</span>
+<span style="color: #000000;">42</span></pre></pre></div></div><br>
+<br>
+Si on veut faire une division :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> $<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #000000;">84</span><span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">2</span><span style="color: #7a0874; font-weight: bold;">)</span><span style="color: #7a0874; font-weight: bold;">)</span>
+<span style="color: #000000;">42</span></pre></pre></div></div><br>
+<br>
+On peut évidemment utiliser des variables dans le calcul :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #007800;">i</span>=<span style="color: #000000;">42</span>
+<span style="color: #7a0874; font-weight: bold;">echo</span> $<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #007800;">$i</span><span style="color: #000000; font-weight: bold;">*</span><span style="color: #000000;">2</span><span style="color: #7a0874; font-weight: bold;">)</span><span style="color: #7a0874; font-weight: bold;">)</span>
+<span style="color: #000000;">84</span></pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-incrementer-et-decrementer">Incrémenter et décrémenter</h3><br>
+
+<br>
+Pour incrémenter ou décrémenter, on peut utiliser la fonction let :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #007800;">i</span>=<span style="color: #000000;">42</span>
+<span style="color: #7a0874; font-weight: bold;">let</span> i--
+<span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #007800;">$i</span>
+<span style="color: #000000;">41</span></pre></pre></div></div><br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">let</span> i++
+<span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #007800;">$i</span>
+<span style="color: #000000;">42</span></pre></pre></div></div><br>
+<br>
+<h2 class="formatter-title wiki-paragraph-2" id="paragraph-les-structures-conditionnelles-if">Les structures conditionnelles : If</h2><br>
+
+<br>
+Le test "Si'" est généralement fait ainsi :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> condition
+<span style="color: #000000; font-weight: bold;">then</span>
+    commande <span style="color: #000000;">1</span>
+    commande2
+<span style="color: #000000; font-weight: bold;">fi</span></pre></pre></div></div><br>
+<br>
+Pour les exemples, nous avons besoin d'opérateurs de comparaison, voir ci-dessous.<br>
+<br>
+<h2 class="formatter-title wiki-paragraph-2" id="paragraph-les-operateurs-de-comparaison">Les opérateurs de comparaison</h2><br>
+
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-comparaison-d-entiers">Comparaison d'entiers</h3><br>
+
+<br>
+<strong>-eq</strong> : est égal à<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> <span style="color: #660033;">-eq</span> <span style="color: #ff0000;">"<span style="color: #007800;">$b</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-ne</strong> : n'est pas égal à<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> <span style="color: #660033;">-ne</span> <span style="color: #ff0000;">"<span style="color: #007800;">$b</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-gt</strong> : est plus grand que<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> <span style="color: #660033;">-gt</span> <span style="color: #ff0000;">"<span style="color: #007800;">$b</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-ge</strong> : est plus grand ou égal à<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> <span style="color: #660033;">-ge</span> <span style="color: #ff0000;">"<span style="color: #007800;">$b</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-lt</strong> : est plus petit que<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> <span style="color: #660033;">-lt</span> <span style="color: #ff0000;">"<span style="color: #007800;">$b</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-le</strong> : est plus petit ou égal à<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> <span style="color: #660033;">-le</span> <span style="color: #ff0000;">"<span style="color: #007800;">$b</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-comparaison-de-chaines">Comparaison de chaînes</h3><br>
+
+<br>
+<strong>=</strong> : est égal à<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> = <span style="color: #ff0000;">"<span style="color: #007800;">$b</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>!=</strong> : n'est pas égal à<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> <span style="color: #000000; font-weight: bold;">!</span>= <span style="color: #ff0000;">"<span style="color: #007800;">$b</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-z string</strong> : Vrai si la longueur de la chaîne est égale à 0 (variable non initialisée)<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-z</span> <span style="color: #ff0000;">"<span style="color: #007800;">$var</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-match-de-chaine">Match de chaine</h3><br>
+
+<br>
+<strong>=~</strong> : match avec une regexp.<br>
+<br>
+Exemple, si la variable contient "cou" :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> =~ cou <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+Exemple, si ça commence par un a :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> =~ ^a <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-les-tests-sur-les-chaines">Les tests sur les chaines</h3><br>
+
+<br>
+<strong>-z $var</strong> : Vrai si la taille de la chaîne est zéro (variable non utilisée ou vide)<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-z</span> <span style="color: #007800;">$var</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-n $var</strong> : Vrai si la taille de la chaîne est différente de zéro (variable utilisée et non vide)<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-n</span> <span style="color: #007800;">$var</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-les-tests-sur-les-fichiers">Les tests sur les fichiers</h3><br>
+
+<br>
+<strong>-e file</strong> : Vrai si le fichier existe<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-e</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>fichier <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-d file</strong> : Vrai si le fichier existe et que c'est un répertoire<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-d</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>dossier <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-f file</strong> : Vrai si le fichier existe et que c'est un fichier ordinaire<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-f</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>fichier <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-h file</strong> : Vrai si le fichier existe et que c'est un lien symbolique<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-h</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>lien <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-r file</strong> : Vrai si le fichier possède les droits de lecture<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-r</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>fichier <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-s file</strong> : Vrai si le fichier a une taille non nulle<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-s</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>fichier <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-w file</strong> : Vrai si le fichier possède les droits d'écriture<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-w</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>fichier <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-x file</strong> : Vrai si le fichier possède les droits d'exécution<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-x</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>fichier <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-O file :</strong> Vrai si le possesseur est identique à celui qui exécute le test<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-O</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>fichier <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>-G file :</strong> Vrai si le possesseur qui exécute le test fait partie du groupe du fichier<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-G</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>fichier <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+-N file : Vrai si le fichier existe et qu'il a été modifié depuis sa dernière lecture<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-N</span> <span style="color: #000000; font-weight: bold;">/</span>tmp<span style="color: #000000; font-weight: bold;">/</span>fichier <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-comparaison-de-fichiers">Comparaison de fichiers</h3><br>
+
+<br>
+<strong>file1 -nt file2</strong> : Vrai si le file1 est plus récent que file2 (date de modification) ou si file1 existe et pas file2<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> file1 <span style="color: #660033;">-nt</span> file2 <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<strong>file1 -ot file2</strong> : Vrai si file1 est plus ancien que file2 ou que file2 existe et pas file1<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> file1 <span style="color: #660033;">-ot</span> file2 <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-la-negation-inverser-le-test">La négation (inverser le test)</h3><br>
+
+<br>
+Le symbole de négation est <strong>!</strong>.<br>
+Si on teste de cette façon su un dossier existe :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #660033;">-d</span> <span style="color: #ff0000;">"<span style="color: #007800;">$DIR</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+Et bien tester s'il existe pas se fera ainsi :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #000000; font-weight: bold;">!</span> <span style="color: #660033;">-d</span> <span style="color: #ff0000;">"<span style="color: #007800;">$DIR</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-et-ou">Et Ou</h3><br>
+
+<br>
+Si vous voulez combiner des tests (le ET ou bien le OU) c'est avec -a et -o :<br>
+<br>
+ Pour le ET :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> <span style="color: #660033;">-gt</span> <span style="color: #ff0000;">"<span style="color: #007800;">$b</span>"</span> <span style="color: #000000; font-weight: bold;">&amp;&amp;</span> <span style="color: #ff0000;">"<span style="color: #007800;">$c</span>"</span> <span style="color: #660033;">-gt</span> <span style="color: #ff0000;">"<span style="color: #007800;">$d</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+Pour le OU :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #ff0000;">"<span style="color: #007800;">$a</span>"</span> <span style="color: #660033;">-gt</span> <span style="color: #ff0000;">"<span style="color: #007800;">$b</span>"</span> <span style="color: #000000; font-weight: bold;">||</span> <span style="color: #ff0000;">"<span style="color: #007800;">$c</span>"</span> <span style="color: #660033;">-gt</span> <span style="color: #ff0000;">"<span style="color: #007800;">$d</span>"</span> <span style="color: #7a0874; font-weight: bold;">]</span><span style="color: #7a0874; font-weight: bold;">]</span></pre></pre></div></div><br>
+<br>
+<h2 class="formatter-title wiki-paragraph-2" id="paragraph-les-structures-conditionnelles-partie-2">Les structures conditionnelles Partie 2</h2><br>
+
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-for">For</h3><br>
+
+<br>
+Pour le for ce n'est pas très compliqué :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">for</span> i <span style="color: #000000; font-weight: bold;">in</span> <span style="color: #000000;">1</span> <span style="color: #000000;">2</span> <span style="color: #000000;">3</span> <span style="color: #000000;">4</span> <span style="color: #000000;">5</span>
+<span style="color: #000000; font-weight: bold;">do</span>
+    <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #007800;">$i</span>
+    commande1
+    commande2
+    commandeN
+<span style="color: #000000; font-weight: bold;">done</span></pre></pre></div></div><br>
+<br>
+On peut traiter avec une commande aussi, par exemple la boucle ci-dessus peut être écrite en utilisant la commande <strong>seq</strong> :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">for</span> i <span style="color: #000000; font-weight: bold;">in</span> $<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #c20cb9; font-weight: bold;">seq</span> <span style="color: #000000;">1</span> <span style="color: #000000;">5</span><span style="color: #7a0874; font-weight: bold;">)</span>
+<span style="color: #000000; font-weight: bold;">do</span>
+    <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #007800;">$i</span>
+    commande1
+    commande2
+    commandeN
+<span style="color: #000000; font-weight: bold;">done</span></pre></pre></div></div><br>
+<br>
+Et on peut aussi utiliser des chaines de caractère :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">for</span> f <span style="color: #000000; font-weight: bold;">in</span> fic1 fic2 fic3
+<span style="color: #000000; font-weight: bold;">do</span>
+    <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"On affiche le fichier <span style="color: #007800;">$f</span>"</span>
+    <span style="color: #c20cb9; font-weight: bold;">cat</span> <span style="color: #007800;">$f</span>
+<span style="color: #000000; font-weight: bold;">done</span></pre></pre></div></div><br>
+Pour la boucle infinie, utiliser ceci (fin de la boucle avec <strong>break</strong>) ou <strong>CTRL+C</strong> :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">for</span> <span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #7a0874; font-weight: bold;">(</span> ; ; <span style="color: #7a0874; font-weight: bold;">)</span><span style="color: #7a0874; font-weight: bold;">)</span>
+<span style="color: #000000; font-weight: bold;">do</span>
+   <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"boucle infinie"</span>
+<span style="color: #000000; font-weight: bold;">done</span></pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-while">While</h3><br>
+
+<br>
+ De manière générale, la syntaxe est la suivante :<br>
+<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">while</span> <span style="color: #7a0874; font-weight: bold;">[</span> condition <span style="color: #7a0874; font-weight: bold;">]</span>
+<span style="color: #000000; font-weight: bold;">do</span>
+   commande1
+   commande2
+   commande3
+<span style="color: #000000; font-weight: bold;">done</span></pre></pre></div></div><br>
+Voici un exemple :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #007800;">x</span>=<span style="color: #000000;">1</span>
+<span style="color: #000000; font-weight: bold;">while</span> <span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #007800;">$x</span> <span style="color: #660033;">-le</span> <span style="color: #000000;">5</span> <span style="color: #7a0874; font-weight: bold;">]</span>
+<span style="color: #000000; font-weight: bold;">do</span>
+  <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"Passage numéro <span style="color: #007800;">$i</span>"</span>
+  <span style="color: #007800;">x</span>=$<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #007800;">$x</span>+<span style="color: #000000;">1</span><span style="color: #7a0874; font-weight: bold;">)</span><span style="color: #7a0874; font-weight: bold;">)</span>
+<span style="color: #000000; font-weight: bold;">done</span></pre></pre></div></div><br>
+<br>
+La boucle infinie se traduit ainsi :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">while</span> :
+<span style="color: #000000; font-weight: bold;">do</span>
+    <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"boucle infinie"</span>
+<span style="color: #000000; font-weight: bold;">done</span></pre></pre></div></div><br>
+<br>
+La boucle infinie peut s’interrompre avec <strong>break</strong> :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">while</span> :
+<span style="color: #000000; font-weight: bold;">do</span>
+    <span style="color: #c20cb9; font-weight: bold;">read</span> <span style="color: #660033;">-p</span> <span style="color: #ff0000;">"Entrer un chiffre ( -1 pour quitter ) : "</span> a
+    <span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span> <span style="color: #007800;">$a</span> <span style="color: #660033;">-eq</span> <span style="color: #660033;">-1</span> <span style="color: #7a0874; font-weight: bold;">]</span>
+    <span style="color: #000000; font-weight: bold;">then</span>
+        <span style="color: #7a0874; font-weight: bold;">break</span>
+    <span style="color: #000000; font-weight: bold;">fi</span>
+    <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"Vous avez saisi <span style="color: #007800;">$a</span>"</span>
+<span style="color: #000000; font-weight: bold;">done</span></pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-case-ou-switch">Case ou switch</h3><br>
+
+<br>
+Le case (ou parfois dans d'autres langages switch) permet d'éviter l'imbrication de multiples if.<br>
+<br>
+Voici un exemple. Le test peut être fait sur une chaine (ici B KB MB GB TB) ou sur des nombres :<br>
+<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">case</span> <span style="color: #007800;">$UNIT</span> <span style="color: #000000; font-weight: bold;">in</span>
+                B<span style="color: #7a0874; font-weight: bold;">)</span>
+                        <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"Unité Octet"</span>
+                <span style="color: #000000; font-weight: bold;">;;</span>
+                KB<span style="color: #7a0874; font-weight: bold;">)</span>
+                        <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"Unité KiloOctet"</span>
+                <span style="color: #000000; font-weight: bold;">;;</span>
+                MB<span style="color: #7a0874; font-weight: bold;">)</span>
+                        <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"Unité MegaOctet"</span>
+                <span style="color: #000000; font-weight: bold;">;;</span>
+                GB<span style="color: #7a0874; font-weight: bold;">)</span>
+                        <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"Unité GigaOctet"</span>
+                <span style="color: #000000; font-weight: bold;">;;</span>
+                TB<span style="color: #7a0874; font-weight: bold;">)</span>
+                        <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"Unité TeraOctet"</span>
+                <span style="color: #000000; font-weight: bold;">;;</span>
+                <span style="color: #000000; font-weight: bold;">*</span><span style="color: #7a0874; font-weight: bold;">)</span>
+                       <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"Choix par défaut"</span>
+                <span style="color: #000000; font-weight: bold;">;;</span>
+                <span style="color: #000000; font-weight: bold;">esac</span>
+&nbsp;</pre></pre></div></div><br>
+<br>
+<h2 class="formatter-title wiki-paragraph-2" id="paragraph-les-tableaux">Les tableaux</h2><br>
+
+<br>
+Il est possible d'utiliser les tableaux en bash !<br>
+<br>
+Affectation du premier enregistrement du tableau "tab" :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;">tab<span style="color: #7a0874; font-weight: bold;">[</span><span style="color: #000000;">0</span><span style="color: #7a0874; font-weight: bold;">]</span>=val</pre></pre></div></div><br>
+<br>
+Contenu du premier enregistrement du tableau "tab" :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${tab[0]}</span></pre></pre></div></div><br>
+ou<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #007800;">$tab</span></pre></pre></div></div><br>
+<br>
+Contenu du douzième enregistrement du tableau "tab" (oui ça commence à 0) :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${tab[11]}</span></pre></pre></div></div><br>
+<br>
+Ensemble des enregistrements du tableau "tab" :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${tab[*]}</span></pre></pre></div></div><br>
+<br>
+Longueur du douzième enregistrement du tableau "tab" :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${#tab[11]}</span></pre></pre></div></div><br>
+<br>
+Nombre d'enregistrements du tableau "tab" :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #800000;">${#tab[*]}</span></pre></pre></div></div><br>
+<br>
+<h2 class="formatter-title wiki-paragraph-2" id="paragraph-des-petits-trucs-marrants">Des petits trucs marrants</h2><br>
+
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-lire-un-fichier-ligne-par-ligne">Lire un fichier ligne par ligne</h3><br>
+
+<br>
+Pour lire les lignes d'un fichier :<br>
+<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">while</span> <span style="color: #c20cb9; font-weight: bold;">read</span> ligne
+<span style="color: #000000; font-weight: bold;">do</span>
+    <span style="color: #7a0874; font-weight: bold;">echo</span>  <span style="color: #ff0000;">"<span style="color: #007800;">$ligne</span>"</span>
+<span style="color: #000000; font-weight: bold;">done</span> <span style="color: #000000; font-weight: bold;">&lt;</span> fichier</pre></pre></div></div><br>
+<br>
+Si on veut lire un fichier avec des lignes avec un séparateur (exemple 
+passwd, qui a le séparateur : ) on peut stocker direct dans les 
+variables<br>
+<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">while</span> <span style="color: #007800;">IFS</span>=: <span style="color: #c20cb9; font-weight: bold;">read</span> user pass uid gid nom dossperso shell
+<span style="color: #000000; font-weight: bold;">do</span>
+   <span style="color: #7a0874; font-weight: bold;">echo</span>  <span style="color: #ff0000;">"<span style="color: #007800;">$user</span> avec UID <span style="color: #007800;">$uid</span> a son home dans <span style="color: #007800;">$dossperso</span>"</span>
+<span style="color: #000000; font-weight: bold;">done</span> <span style="color: #000000; font-weight: bold;">&lt;</span> <span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span><span style="color: #c20cb9; font-weight: bold;">passwd</span></pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-verifier-si-on-est-root">Vérifier si on est root</h3><br>
+
+<br>
+Pour vérifier si le script est lancé en root, on peut utiliser ce petit 
+morceau de code qui va vérifier l'id de l'utilisateur (0 = root) :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">if</span> <span style="color: #7a0874; font-weight: bold;">[</span> $<span style="color: #7a0874; font-weight: bold;">(</span><span style="color: #c20cb9; font-weight: bold;">id</span> -u<span style="color: #7a0874; font-weight: bold;">)</span> <span style="color: #660033;">-ne</span> <span style="color: #000000;">0</span> <span style="color: #7a0874; font-weight: bold;">]</span>
+<span style="color: #000000; font-weight: bold;">then</span>
+   <span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">"Doit être lancé en root"</span> 
+   <span style="color: #7a0874; font-weight: bold;">exit</span> <span style="color: #000000;">1</span>
+<span style="color: #000000; font-weight: bold;">fi</span></pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-lire-une-variable-depuis-une-saisie-du-clavier">Lire une variable depuis une saisie du clavier</h3><br>
+
+<br>
+Si vous voulez demander à l'utilisateur de taper du texte, et de 
+récupérer le contenu dans une variable, c'est possible. C'est la 
+commande read :<br>
+<br>
+Ici, stockons le résultat de la saisie dans la variable TEXTE :<br>
+<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">read</span> TEXTE</pre></pre></div></div><br>
+<br>
+Avec l'option -p on pourra même mettre un message avant la saisie (qui se sera pas inclus dans le contenu de la variable) :<br>
+<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">read</span> <span style="color: #660033;">-p</span> <span style="color: #ff0000;">"Saisir un mot : "</span> TEXTE</pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-verifier-le-bon-deroulement-d-une-commande">Vérifier le bon déroulement d'une commande</h3><br>
+
+<br>
+Tous se passe dans le code retour de la commande.<br>
+Exemple avec ls. La page man indique les différents codes retour :<br>
+<div class="formatter-container formatter-code code-TEXT"><span class="formatter-title">Code TEXT :</span><div class="formatter-content"><pre style="display:inline;"><pre class="text" style="font-family:monospace;">       0      si OK,
+       1      si problèmes mineurs (par exemple,  impossible  d'accéder  à  un
+              sous-répertoire),
+       2      si  erreur  grave  (par  exemple,  impossible  d'accéder aux pa‐
+              ramètres de la ligne de commande).</pre></pre></div></div><br>
+Ce code est stocké dans la variable <strong>$?</strong> :<br>
+<br>
+Voyons un exemple avec un succès (même si je n'ai rien dans /mnt, la 
+commande n'a rencontré aucune erreur, le code vaut donc 0) :<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">ls</span> <span style="color: #000000; font-weight: bold;">/</span>mnt
+<span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #007800;">$?</span>
+<span style="color: #000000;">0</span></pre></pre></div></div><br>
+<br>
+Ici un exemple avec un répertoire inexistant (le code vaut 2) :<br>
+<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">ls</span> <span style="color: #000000; font-weight: bold;">/</span>existepas
+ls: impossible d<span style="color: #ff0000;">'accéder à '</span><span style="color: #000000; font-weight: bold;">/</span>existepas<span style="color: #ff0000;">': Aucun fichier ou dossier de ce type
+echo $?
+2</span></pre></pre></div></div><br>
+<br>
+<h3 class="formatter-title wiki-paragraph-3" id="paragraph-mettre-le-texte-en-couleur">Mettre le texte en couleur</h3><br>
+
+<br>
+Pour agrémenter vos scripts, vous pouvez mettre de la couleur.<br>
+<br>
+Voici une liste des couleurs possibles (ici j'affecte à des variables les codes couleur) :<br>
+<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #666666; font-style: italic;"># Réinitialisation de la couleur après cette balise</span>
+<span style="color: #007800;">COLOR_RESET</span>=<span style="color: #ff0000;">'\033[0m'</span>
+<span style="color: #666666; font-style: italic;"># Codes couleurs à placer avant le texte :</span>
+<span style="color: #007800;">COLOR_NOIR</span>=<span style="color: #ff0000;">'\033[0;30m'</span>
+<span style="color: #007800;">COLOR_ROUGE</span>=<span style="color: #ff0000;">'\033[0;31m'</span>
+<span style="color: #007800;">COLOR_VERT</span>=<span style="color: #ff0000;">'\033[0;32m'</span>
+<span style="color: #007800;">COLOR_JAUNE</span>=<span style="color: #ff0000;">'\033[0;33m'</span>
+<span style="color: #007800;">COLOR_BLEU</span>=<span style="color: #ff0000;">'\033[0;34m'</span>
+<span style="color: #007800;">COLOR_VIOLET</span>=<span style="color: #ff0000;">'\033[0;35m'</span>
+<span style="color: #007800;">COLOR_CYAN</span>=<span style="color: #ff0000;">'\033[0;36m'</span>
+<span style="color: #007800;">COLOR_BLANC</span>=<span style="color: #ff0000;">'\033[0;37m'</span></pre></pre></div></div><br>
+<br>
+Dans un code de type <strong>\033[0;31m</strong> pour le rouge, vous pouvez remplacer le 0 après le crochet ouvrant indique le style du texte.<br>
+0 : Standard<br>
+1 : Gras<br>
+2 : Ca semble plus foncé<br>
+3 : Italique<br>
+4 : Souligné<br>
+5 : Clignotant<br>
+7 : Surligné<br>
+9 : Barré<br>
+<br>
+Voici un exemple en rouge et gras (notez l'usage de l'option -e de echo) :<br>
+<br>
+<div class="formatter-container formatter-code code-BASH"><span class="formatter-title">Code BASH :</span><div class="formatter-content"><pre style="display:inline;"><pre class="bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #660033;">-e</span> <span style="color: #ff0000;">'\033[1;31m'</span> ROUGE <span style="color: #ff0000;">'\033[0m'</span></pre></pre></div></div><br>
+<br></div>
+	
+
+</body></html>
