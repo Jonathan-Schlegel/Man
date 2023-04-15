@@ -23,7 +23,7 @@ Il est recommander de mettre la date, la version, l'auteur, la description etc.
 #
 # Version : 1.0
 #
-# Description: ce script permet d'afficher le nom de l'utilisateur
+# Description: ce script permet d'afficher le #nom de l'utilisateur
 #
 # Utilisation: name utilisateur
 #############################
@@ -248,15 +248,39 @@ Avec dig:
 
 |**Commande**      |**Utilisation**      |
 |------------------|---------------------|
-|   copy run start |Ajoute la présente configuration au redémarrage|
-|   passive-interface interface| |
-|   show ip protocol||
-|    encapsulation Dot1Q X|Ajout d'une encapsulation pour le vlan X|
-|   ip address @IP @masque|Ajoute une adresse IP|
+|   enable         | Entrer en mode privilégié|
+|   show running   | Affiche la configuration générale|
+|   show ip ospf   | Affiche les informations relatives aux processus OSPF|
+|   show ip ospf neighbor| Affiche les voisins OSPF|
+|   show ip ospf database| Affiche les databases OSPF|
+|   show crypto isakmp| Affiche| 
+| show ip interfaces brief| Montre les interfaces et leurs états|
+|   copy run start / wr | Ajoute la présente configuration au redémarrage|
+|   configure terminal| Entrer en mode configuration|
+|   no commande    | Annule la commande|
+|   exit           | Revient plus haut dans l'arborescence|
+|   interface nom_interface| Sélectionne l'interface|
+|   passive-interface interface| N'envoie pas de paquet OSPF |
+|   show ip protocol| |
+|   show ip nat translation| Affichque la table des traductions|
+|    encapsulation Dot1Q X| Ajoute d'une encapsulation pour le vlan X|
+|   ip address @IP @masque| Ajoute une adresse IP|
 |   ip access-list extended nom_regle|Créer, sélectionne une règle|
-|   deny ip @IPsource wilcard @IPdestination ildcard|Interdire une adresse de communiquer avec une autre|
-|   permit ip any any|Permet à tout le monde de communiquer ensemble|
-|   ip access-group nom_regle in/out|Applique la règle sur une interface en entrée ou sortie
+|   permit ip @IPsource wilcard @IPdestination ildcard| Autorise une adresse de communiquer avec une autre|
+|   deny ip @IPsource wilcard @IPdestination ildcard| Interdire une adresse de communiquer avec une autre|
+|   permit ip any any| Permet à toute les IP sources de communiquer avec toutes les IP destinations|
+|   deny ip any any| Interdit à toute les IP sources de communiquer avec toutes les IP destinations|
+|   ip access-group nom_regle in/out|Applique la règle sur une interface en entrée ou sortie|
+|   ip nat outside| Indique l'interface de l'adresse publique pour traduction|
+|   ip nat inside| Indique l'interface de l'adresse privé pour traduction|
+|   ip nat inside source static @Privé @Publique||
+|   router bgp as|  |
+|   neighbor @ip remote-as numero| On déclare le voisin avec son ip et son AS| |
+|   network @ip_reseau mask @mask| On déclare un réseau|
+
+redistribute ospf processus metric nombre
+redistribute bgp 100 subnets metric 3
+
 
 ## Switch
 
@@ -264,9 +288,8 @@ Avec dig:
 |------------------|---------------------|
 |   enable         |Mode privilégié      |
 |   configure terminal|Mode configuration|
-|   show running   |Montre tous          |
+|   show running   | Affiche la configuration générale|
 |   show vlan      |Montre les vlan      |
-|   show interfaces status|Montre les interfaces et leurs états|
 |   interface nom_interface|Sélectionne l'interface|
 |   no shut        |Allume l'interface   |
 |   exit           |Sortir               |
@@ -298,6 +321,10 @@ Avec dig:
 - auto-cost reference bandwidth 1000
 - router-id X.X.X.X
 - clear ip ospf process
+- ip multicast-routing
+- ip point-to-point
+- show ip interface brief
+- redistribute
 
 
 ## RIP
